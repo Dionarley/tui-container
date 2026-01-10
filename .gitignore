@@ -1,0 +1,18 @@
+# Persistência local
+workspace/*
+!workspace/.gitkeep
+
+# Micro editor
+config/micro/backups/
+config/micro/buffers/
+
+# Cache
+*.swp
+*.tmp
+
+# Docker
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
