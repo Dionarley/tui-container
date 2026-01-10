@@ -1,0 +1,11 @@
+services:
+  tui:
+    image: tui-kiosk
+    build: .
+    container_name: tui-kiosk
+    stdin_open: true
+    tty: true
+    user: "${HOST_UID}:${HOST_GID}"
+    volumes:
+      - ./workspace:/workspace
+      - ./config:/home/tui/.config
