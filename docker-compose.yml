@@ -1,11 +1,25 @@
 services:
-  tui:
+  tui-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    image: tui-dev
+    stdin_open: true
+    tty: true
+    user: "${HOST_UID}:${HOST_GID}"
+    volumes:
+      - ./workspace:/workspace
+      - ./config:/home/dev/.config
+
+  tui-kiosk:
+    build:
+      context: .
+      dockerfile: Dockerfile.kiosk
     image: tui-kiosk
-    build: .
-    container_name: tui-kiosk
     stdin_open: true
     tty: true
     user: "${HOST_UID}:${HOST_GID}"
     volumes:
       - ./workspace:/workspace
       - ./config:/home/tui/.config
+
