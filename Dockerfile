@@ -1,38 +1,29 @@
-# === KIOSK MODE ===
-set -g mouse on
-set -g status on
-set -g status-position bottom
-set -g status-bg black
-set -g status-fg white
+FROM alpine:3.19
 
-# NÃO permitir sair
-unbind-key C-b
-unbind-key q
-unbind-key x
-unbind-key d
-unbind-key c
-unbind-key &
-unbind-key %
+RUN apk update && apk add --no-cache \
+    bash \
+    tmux \
+    ranger \
+    micro \
+    git \
+    curl \
+    less \
+    ncurses \
+    ca-certificates
 
-# Prefixo simples
-set -g prefix C-a
-bind C-a send-prefix
+# Usuário não-root
+RUN addgroup -g 1000 tui && \
+    adduser -D -u 1000 -G tui tui
 
-# NÃO permitir detach
-unbind d
+USER tui
+WORKDIR /workspace
 
-# Painéis fixos
-new-session -d -s kiosk
+# Configurações
+COPY tmux.conf /home/tui/.tmux.conf
+COPY tmux-kiosk.conf /home/tui/.tmux-kiosk.conf
+COPY config /home/tui/.config
 
-rename-window "TUI"
+ENV TERM=xterm-256color
+ENV SHELL=/bin/bash
 
-# Layout:
-# [ ranger | micro ]
-# [    shell       ]
-
-split-window -h -p 40 "ranger"
-split-window -v -p 70 "micro"
-select-pane -t 0
-send-keys "cd /workspace" Enter
-
-set -g remain-on-exit off
+CMD ["tmux", "-f", "/home/tui/.tmux-kiosk.conf"]
