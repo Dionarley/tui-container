@@ -1,0 +1,29 @@
+FROM alpine:3.19
+
+RUN apk update && apk add --no-cache \
+    bash \
+    tmux \
+    ranger \
+    micro \
+    git \
+    curl \
+    less \
+    ncurses \
+    ca-certificates
+
+# Usuário final (sem sudo)
+RUN addgroup -g 1000 tui && \
+    adduser -D -u 1000 -G tui tui
+
+USER tui
+WORKDIR /workspace
+
+COPY tmux.conf /home/tui/.tmux.conf
+COPY tmux-kiosk.conf /home/tui/.tmux-kiosk.conf
+COPY config /home/tui/.config
+
+ENV TERM=xterm-256color
+ENV SHELL=/bin/bash
+
+CMD ["tmux", "-f", "/home/tui/.tmux-kiosk.conf"]
+
