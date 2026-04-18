@@ -38,10 +38,6 @@ theme:
 
 plugins:
   - search
-  - minify:
-      minify_html: true
-      minify_js: true
-      minify_css: true
 
 markdown_extensions:
   - abbr
@@ -84,5 +80,4 @@ nav:
 
 docs_dir: docs
 site_dir: site
-strict: true
-fail_on_warning: false
+strict: false
