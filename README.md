@@ -1,186 +1,307 @@
-# 🖥️ TUI Container — Dev & Kiosk Mode
+# 🖥️ TUI Container
 
-A minimalist TUI desktop based on Alpine Linux running in Docker with two distinct profiles:
-
-- 🧪 **DEV** — explorable development and testing environment
-- 🔒 **KIOSK** — immutable, locked appliance/thin client style
-
-Ideal for:
-- TUI terminals
-- Restricted environments
-- Thin clients
-- Immutability studies
-- Terminal-first workflows
-
----
-
-## ✨ Features
-
-- 🐧 Alpine Linux (lightweight and fast)
-- 🧱 Docker containers (no VM)
-- 🧠 tmux as TUI "window manager"
-- 🗂 ranger (file manager)
-- ✍ micro (text editor)
-- 📦 Persistence only in `/workspace`
-- 🔐 No root in kiosk mode
-- 🔁 Two separate modes (DEV vs KIOSK)
-
----
-
-## 📁 Project Structure
+![Docker Build](https://github.com/Dionarley/tui-container/actions/workflows/build.yml/badge.svg)
+![License](https://img.shields.io/badge/License-MIT-blue.svg)
+![Alpine](https://img.shields.io/badge/Alpine-3.19-0D597F.svg)
+![Docker](https://img.shields.io/badge/Docker-20.10+-2496ED.svg)
 
 ```
-tui-container/
-├── AGENTS.md              # Agentic coding guidelines
-├── DEVELOPMENT.md         # Development guide
-├── RELEASE.md           # Release procedures
-├── CHANGELOG.md         # Change log
-├── README.md            # This file
-├── Dockerfile.dev      # DEV mode definition
-├── Dockerfile.kiosk   # KIOSK mode definition
-├── docker-compose.yml  # Container definitions
-├── run-dev.sh         # DEV launcher
-├── run-kiosk.sh       # KIOSK launcher
-├── build.sh           # Build script
-├── lib/common.sh      # Shared functions
-├── tmux.conf          # DEV tmux config
-├── tmux-kiosk.conf    # KIOSK tmux config
-├── config/            # User configs
-│   ├── micro/
-│   └── ranger/
-└── workspace/         # Persistent user data
+╔═══════════════════════════════════════════════════════════╗
+║   🖥️ TUI Container                                         ║
+║   ──────────────────────────────────────────────────────  ║
+║   Dev Mode  •  KIOSK Mode  •  Alpine Linux  •  Docker      ║
+║   tmux + ranger + micro                                    ║
+╚═══════════════════════════════════════════════════════════╝
+```
+
+A minimalist TUI desktop environment based on **Alpine Linux** running in **Docker** with two distinct operational profiles.
+
+---
+
+## Table of Contents
+
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [Modes](#modes)
+- [Tools](#tools)
+- [Project Structure](#project-structure)
+- [Configuration](#configuration)
+- [Documentation](#documentation)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
+
+## Features
+
+| Feature | Description |
+|---------|-------------|
+| 🐧 Alpine Linux | Lightweight (5MB base) and fast |
+| 🧱 Docker | No VM overhead, runs anywhere |
+| 🧠 tmux | Terminal multiplexer/window manager |
+| 🗂 ranger | Vi-style file manager |
+| ✍ micro | Modern terminal text editor |
+| 💾 Persistence | Data persists in `./workspace` |
+| 🔐 Security | No root in KIOSK mode |
+| 🔄 Two modes | DEV (development) vs KIOSK (production) |
+
+---
+
+## Quick Start
+
+```bash
+# Clone and enter
+git clone https://github.com/Dionarley/tui-container.git
+cd tui-container
+
+# Build containers
+./build.sh                    # All containers
+./build.sh dev               # DEV only
+./build.sh kiosk             # KIOSK only
+
+# Run containers
+./run-dev.sh                 # Development mode
+./run-kiosk.sh               # KIOSK mode
 ```
 
 ---
 
-## 🧠 Concept: DEV vs KIOSK
+## Modes
 
-### 🧪 DEV Mode
+| Feature | DEV Mode | KIOSK Mode |
+|---------|---------|-----------|
+| User | `dev` | `tui` |
+| sudo | ✅ Yes | ❌ No |
+| apk add | ✅ Yes | ❌ No |
+| vim | ✅ Yes | ❌ No |
+| Free shell | ✅ Yes | ❌ No |
+| Fixed layout | ❌ No | ✅ Yes |
+| Starts in tmux | ❌ Manual | ✅ Auto |
 
-Environment for:
-- Testing configs
+### DEV Mode
+
+Development environment for:
+- Testing configurations
 - Installing packages
 - Editing files
 - Experimenting with layouts
 
-Features:
-- User `dev`
-- `sudo` enabled
-- `vim` available
-- Free shell
-
-### 🔒 KIOSK Mode
-
-Production environment:
-- Immutable
-- No root
-- No `apk add`
-- No exposed shell
-- Starts directly in tmux
-
-Features:
-- User `tui`
-- No sudo
-- No privilege escalation
-- Fixed tmux layout
-
----
-
-## ⚠️ Requirements
-
-- Docker 20.10+
-- Docker Compose v2
-- Linux (tested on Arch Linux)
-- UTF-8 compatible terminal
-
----
-
-## ▶️ Quick Start
-
-### 1️⃣ Clone Repository
-
-```bash
-git clone <repo-url>
-cd tui-container
-```
-
-### 2️⃣ Build Containers
-
-```bash
-# Build all
-./build.sh
-
-# Or build specific
-./build.sh dev
-./build.sh kiosk
-```
-
-### 3️⃣ Run DEV Mode
-
 ```bash
 ./run-dev.sh
+# Then: tmux new-session -n shell
 ```
 
-### 4️⃣ Run KIOSK Mode
+### KIOSK Mode
+
+Immutable production environment:
+- No root access
+- No package installation
+- Locked tmux layout
+- Direct tmux start
 
 ```bash
 ./run-kiosk.sh
+# Starts directly in tmux layout
 ```
 
 ---
 
-## 📖 Documentation
+## Tools
 
-| Document | Description |
-|----------|-------------|
-| [README.md](README.md) | Project overview |
-| [DEVELOPMENT.md](DEVELOPMENT.md) | Contribution guide |
-| [RELEASE.md](RELEASE.md) | Release procedures |
-| [CHANGELOG.md](CHANGELOG.md) | Change history |
-| [AGENTS.md](AGENTS.md) | Agentic coding guidelines |
-
----
-
-## 💾 Persistence
-
-All data in `/workspace` is persisted to `./workspace` on the host.
+| Tool | Version | Purpose |
+|------|---------|---------|
+| tmux | 3.4 | Terminal multiplexer |
+| ranger | 1.9.3 | File manager |
+| micro | 2.0.13 | Text editor |
+| vim | 9.0 | Vi editor |
+| git | 2.43 | Version control |
+| bash | 5.3 | Shell |
 
 ---
 
-## 🔧 Configuration
+## Project Structure
 
-### Add Package to DEV
+```
+tui-container/
+├── README.md              # This file
+├── AGENTS.md             # Agentic coding guidelines
+├── DEVELOPMENT.md        # Contribution guide
+├── RELEASE.md           # Release procedures
+├── CHANGELOG.md          # Change log
+├── Dockerfile.dev       # DEV mode
+├── Dockerfile.kiosk     # KIOSK mode
+├── docker-compose.yml   # Container definitions
+├── build.sh            # Build script
+├── run-dev.sh           # DEV launcher
+├── run-kiosk.sh         # KIOSK launcher
+├── lib/common.sh       # Shared functions
+├── tmux.conf           # DEV tmux config
+├── tmux-kiosk.conf     # KIOSK tmux config
+├── tests/              # Test suite
+│   └── test-*.sh
+├── config/             # User configs
+│   ├── micro/
+│   └── ranger/
+└── workspace/          # Persistent data
+```
+
+---
+
+## Configuration
+
+### Adding Packages
 
 ```dockerfile
-# Edit Dockerfile.dev, add to apk add list
+# DEV mode - Edit Dockerfile.dev
+RUN apk add --no-cache new-package
+
+# KIOSK mode - Edit Dockerfile.kiosk
 RUN apk add --no-cache new-package
 ```
 
-### Add Package to KIOSK
-
-```dockerfile
-# Edit Dockerfile.kiosk, add to apk add list
-RUN apk add --no-cache new-package
-```
-
-### Modify tmux Layout
+### Modifying tmux Layout
 
 ```bash
-# DEV
+# DEV layout
 vim tmux.conf
 
-# KIOSK
+# KIOSK layout
 vim tmux-kiosk.conf
 ```
 
+### Permissions
+
+```bash
+# Fix scripts
+chmod +x *.sh
+
+# Fix workspace ownership
+chown -R $(id -u):$(id -g) workspace/
+```
+
 ---
 
-## 📜 License
+## Documentation
 
-MIT
+| Document | Description |
+|----------|-------------|
+| [AGENTS.md](AGENTS.md) | Guidelines for AI agents |
+| [DEVELOPMENT.md](DEVELOPMENT.md) | How to contribute |
+| [RELEASE.md](RELEASE.md) | Release process |
+| [CHANGELOG.md](CHANGELOG.md) | Version history |
 
 ---
 
-## 👤 Author
+## Troubleshooting
 
-Dionarley Ruas Vieira
+### Container Won't Start
+
+```bash
+# Check Docker status
+docker compose ps
+
+# View logs
+docker compose logs
+
+# Rebuild
+docker compose build --no-cache
+docker compose up
+```
+
+### Permission Denied
+
+```bash
+# Fix script permissions
+chmod +x run-dev.sh run-kiosk.sh build.sh
+
+# Fix workspace ownership
+sudo chown -R $(id -u):$(id -g) workspace/
+```
+
+### tmux Not Starting
+
+```bash
+# Check config exists
+ls -la ~/.tmux.conf
+
+# Restore if missing
+cp tmux.conf ~/.tmux.conf
+```
+
+### Network Issues
+
+```bash
+# Recreate network
+docker compose down
+docker network prune
+docker compose up
+```
+
+### Disk Space
+
+```bash
+# Clean Docker
+docker system prune -a
+
+# Remove unused volumes
+docker volume prune
+```
+
+---
+
+## Contributing
+
+See [DEVELOPMENT.md](DEVELOPMENT.md) for contribution guidelines.
+
+### CI/CD Pipeline
+
+```
+┌──────────────┐     ┌──────────────┐     ┌──────────────┐
+│   canary ★   │────▶│     main     │────▶│   v1.0.0 ★   │
+└──────────────┘     └──────────────┘     └──────────────┘
+       │                                      │
+       ▼                                      ▼
+┌──────────────┐                      ┌──────────────┐
+│  tests/* ★   │                      │    Docker     │
+└──────────────┘                      │    Hub ★     │
+                                     └──────────────┘
+```
+
+### Test Suite
+
+```bash
+# Run all tests
+bash tests/test-all.sh
+
+# Individual tests
+bash tests/test-build.sh
+bash tests/test-run-dev.sh
+bash tests/test-run-kiosk.sh
+```
+
+---
+
+## License
+
+MIT License - See [LICENSE](LICENSE)
+
+---
+
+## Author
+
+**Dionarley Ruas Vieira**
+- GitHub: [@Dionarley](https://github.com/Dionarley)
+- Email: dionarley@gmail.com
+
+---
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                                                                 │
+│   🖥️ TUI Container - Minimalist TUI Desktop in Docker            │
+│                                                                 │
+│   Made with 🐧 on Alpine Linux                                  │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
