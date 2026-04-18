@@ -1,0 +1,88 @@
+# =============================================================================
+# TUI Container - MkDocs Configuration
+# =============================================================================
+
+site_name: TUI Container
+site_description: A minimalist TUI desktop environment based on Alpine Linux running in Docker
+site_author: Dionarley Ruas Vieira
+site_url: https://dionarley.github.io/tui-container/
+
+repo_name: tui-container
+repo_url: https://github.com/Dionarley/tui-container
+edit_uri: edit/main/docs/
+
+copyright: Copyright &copy; 2026 Dionarley Ruas Vieira
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: blue grey
+      accent: blue
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - scheme: slate
+      primary: blue grey
+      accent: blue
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - search.suggest
+    - search.highlight
+
+plugins:
+  - search
+  - minify:
+      minify_html: true
+      minify_js: true
+      minify_css: true
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - codehilite
+  - def_list
+  - footnotes
+  - toc:
+      permalink: true
+  - pymdownx.emoji
+  - pymdownx.highlight
+  - pymdownx.tabbed
+
+nav:
+  - Home: index.md
+  - Quick Start:
+      - Installation: quickstart/installation.md
+      - Build: quickstart/build.md
+      - Run: quickstart/run.md
+  - Architecture:
+      - Overview: architecture/overview.md
+      - Modes: architecture/modes.md
+      - Tools: architecture/tools.md
+  - Configuration:
+      - Docker: configuration/docker.md
+      - tmux: configuration/tmux.md
+      - Permissions: configuration/permissions.md
+  - Testing:
+      - Suite: testing/suite.md
+      - Screenshots: testing/screenshots.md
+  - CI/CD:
+      - Pipeline: cicd/pipeline.md
+      - GitHub Actions: cicd/actions.md
+  - Troubleshooting: troubleshooting.md
+  - Security: security.md
+  - Contributing: contributing.md
+  - Changelog: changelog.md
+  - License: license.md
+
+docs_dir: docs
+site_dir: site
+strict: true
+fail_on_warning: false
