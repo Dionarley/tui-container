@@ -1,25 +1,58 @@
+# =============================================================================
+# TUI Container - Docker Compose Definition
+# =============================================================================
+# Services:
+#   - tui-dev: Development environment with sudo
+#   - tui-kiosk: Immutable appliance mode
+# =============================================================================
+
 services:
+  # -----------------------------------------------------------------------------
+  # DEV Mode - Development environment
+  # -----------------------------------------------------------------------------
   tui-dev:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    image: tui-dev
+    image: tui-dev:latest
+    container_name: tui-dev
     stdin_open: true
     tty: true
     user: "${HOST_UID}:${HOST_GID}"
     volumes:
       - ./workspace:/workspace
       - ./config:/home/dev/.config
+    environment:
+      - TERM=xterm-256color
+      - SHELL=/bin/bash
+    networks:
+      - tui-network
 
+  # -----------------------------------------------------------------------------
+  # KIOSK Mode - Immutable appliance
+  # -----------------------------------------------------------------------------
   tui-kiosk:
     build:
       context: .
       dockerfile: Dockerfile.kiosk
-    image: tui-kiosk
+    image: tui-kiosk:latest
+    container_name: tui-kiosk
     stdin_open: true
     tty: true
     user: "${HOST_UID}:${HOST_GID}"
     volumes:
       - ./workspace:/workspace
       - ./config:/home/tui/.config
+    environment:
+      - TERM=xterm-256color
+      - SHELL=/bin/bash
+    networks:
+      - tui-network
 
+# -----------------------------------------------------------------------------
+# Networks
+# -----------------------------------------------------------------------------
+networks:
+  tui-network:
+    driver: bridge
+    name: tui-network
