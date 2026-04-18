@@ -120,6 +120,93 @@ Immutable production environment:
 
 ---
 
+## Screenshots
+
+### Project Overview
+
+```
+╔══════════════════════════════════════════════════════════════════╗
+║  PROJECT STRUCTURE                                         ║
+╠══════════════════════════════════════════════════════════════════╣
+.
+├── config/
+│   ├── micro/
+│   └── ranger/
+├── lib/common.sh
+├── tests/
+│   ├── test-*.sh           # Test suite
+│   └── test-screenshot-*.sh # Screenshot scripts
+├── screenshots/            # Generated screenshots
+├── AGENTS.md             # AI guidelines
+├── DEVELOPMENT.md       # Contrib guide
+├── RELEASE.md          # Release process
+├── CHANGELOG.md         # Version history
+├── Dockerfile.dev      # DEV mode
+├── Dockerfile.kiosk    # KIOSK mode
+├── docker-compose.yml  # Container definitions
+├── build.sh          # Build script
+├── run-dev.sh         # DEV launcher
+├── run-kiosk.sh       # KIOSK launcher
+├── tmux.conf         # DEV config
+└── tmux-kiosk.conf # KIOSK config
+╚══════════════════════════════════════════════════════════════════╝
+```
+
+### Tool Versions
+
+```
+╔══════════════════════════════════════════════════════════════════╗
+║  TOOL VERSIONS                                           ║
+╠══════════════════════════════════════════════════════════════════╣
+┌──────────┬────────────────────────────────┬─────────────┐
+│ Tool     │ Version                       │ Purpose    │
+├──────────┼────────────────────────────────┼─────────────┤
+│ tmux     │ tmux 3.6a                     │ Terminal  │
+│ ranger   │ ranger 1.9.4                 │ File mgr  │
+│ micro    │ Version: 2.0.15              │ Editor   │
+│ git      │ git 2.53.0                    │ Version  │
+│ docker   │ Docker 29.4.0                 │ Container │
+│ compose │ Docker Compose 5.1.3           │ Compose  │
+└──────────┴────────────────────────────────┴─────────────┘
+╚══════════════════════════════════════════════════════════════════╝
+```
+
+### Test Results
+
+```
+╔══════════════════════════════════════════════════════════════════╗
+║  TEST RESULTS SUMMARY                                      ║
+╠═══════════════════════════════════��══════════════════════════════╣
+║  ┌───────────────────┬────────────┬────────────────────┐    ║
+║  │ Test              │ Status    │ Duration          │    ║
+║  ├───────────────────┼────────────┼────────────────────┤    ║
+║  │ Tools            │ ✅ PASSED │ -                │    ║
+║  │ Permissions     │ ✅ PASSED │ -                │    ║
+║  │ Build           │ ✅ PASSED │ ~30s             │    ║
+║  │ Run DEV         │ ✅ PASSED │ ~10s             │    ║
+║  │ Run KIOSK       │ ✅ PASSED │ ~10s             │    ║
+║  └───────────────────┴────────────┴────────────────────┘    ║
+║  RESULT: ALL TESTS PASSED                                ║
+╚══════════════════════════════════════════════════════════════════╝
+```
+
+### Generate Screenshots
+
+```bash
+# Generate all screenshots
+bash tests/test-screenshot-project.sh   # Project overview
+bash tests/test-screenshot-containers.sh # Container states
+bash tests/test-screenshot-tests.sh     # Test results
+
+# View generated screenshots
+ls screenshots/
+cat screenshots/01-*.txt              # Project
+cat screenshots/1*-*.txt              # Containers
+cat screenshots/2*-*.txt              # Tests
+```
+
+---
+
 ## Project Structure
 
 ```
