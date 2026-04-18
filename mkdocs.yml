@@ -81,3 +81,6 @@ nav:
 docs_dir: docs
 site_dir: site
 strict: false
+
+watch:
+  - docs
