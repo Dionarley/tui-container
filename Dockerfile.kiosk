@@ -1,5 +1,16 @@
+# =============================================================================
+# TUI Container - KIOSK Mode
+# =============================================================================
+# Base: Alpine Linux 3.19
+# User: tui (no sudo)
+# Purpose: Immutable appliance-style environment
+# =============================================================================
+
 FROM alpine:3.19
 
+# -----------------------------------------------------------------------------
+# System packages
+# -----------------------------------------------------------------------------
 RUN apk update && apk add --no-cache \
     bash \
     tmux \
@@ -11,19 +22,32 @@ RUN apk update && apk add --no-cache \
     ncurses \
     ca-certificates
 
-# Usuário final (sem sudo)
+# -----------------------------------------------------------------------------
+# User creation (tui without sudo)
+# -----------------------------------------------------------------------------
 RUN addgroup -g 1000 tui && \
     adduser -D -u 1000 -G tui tui
 
+# -----------------------------------------------------------------------------
+# Working directory
+# -----------------------------------------------------------------------------
 USER tui
 WORKDIR /workspace
 
-COPY tmux.conf /home/tui/.tmux.conf
-COPY tmux-kiosk.conf /home/tui/.tmux-kiosk.conf
-COPY config /home/tui/.config
+# -----------------------------------------------------------------------------
+# Copy configuration files
+# -----------------------------------------------------------------------------
+COPY --chown=tui:tui tmux.conf /home/tui/.tmux.conf
+COPY --chown=tui:tui tmux-kiosk.conf /home/tui/.tmux-kiosk.conf
+COPY --chown=tui:tui config /home/tui/.config
 
+# -----------------------------------------------------------------------------
+# Environment variables
+# -----------------------------------------------------------------------------
 ENV TERM=xterm-256color
 ENV SHELL=/bin/bash
 
+# -----------------------------------------------------------------------------
+# Default command (tmux in kiosk mode)
+# -----------------------------------------------------------------------------
 CMD ["tmux", "-f", "/home/tui/.tmux-kiosk.conf"]
-
