@@ -1,9 +1,17 @@
 #!/usr/bin/env bash
+# =============================================================================
+# TUI Container - KIOSK Mode Launcher
+# =============================================================================
+
 set -e
 
-HOST_UID=$(id -u)
-HOST_GID=$(id -g)
+# Load shared functions
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=lib/common.sh
+source "$SCRIPT_DIR/lib/common.sh"
 
-HOST_UID=$HOST_UID HOST_GID=$HOST_GID \
-docker compose run --rm tui-kiosk
+# Check dependencies
+check_docker
 
+# Run kiosk container
+exec_docker_compose run --rm tui-kiosk
